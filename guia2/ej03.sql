@@ -14,3 +14,21 @@ v_num := :pone_nro_max_10_digitos;
     END LOOP;
 
 END;
+
+---------------------------------------------------------------------------------
+
+DECLARE
+    v_num NUMBER(10,0);
+    n NUMBER default 0;
+
+BEGIN
+
+    v_num := :pone_nro_max_10_digitos;
+
+    LOOP 
+        DBMS_OUTPUT.PUT_LINE(n);
+        n := n + 1;
+
+        EXIT WHEN n > v_num;
+    END LOOP;
+END;
