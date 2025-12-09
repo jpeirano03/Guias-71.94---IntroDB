@@ -190,7 +190,7 @@ CREATE OR REPLACE PACKAGE BODY INCREMENTO_SALARIAL IS
     ) IS        
         v_department_id_validado DEPARTMENT.department_id%TYPE;
         v_salario_minimo NUMBER;
-        
+        v_emp_beneficiados NUMBER := 0;
         -- Cursor salario < 1500
         CURSOR c_empleados IS
             SELECT employee_id, last_name, salary
@@ -232,7 +232,7 @@ CREATE OR REPLACE PACKAGE BODY INCREMENTO_SALARIAL IS
             SET salary = salary + v_salario_minimo
             WHERE employee_id = r_empleado.employee_id;
             
-            
+            v_emp_beneficiados := v_emp_beneficiados + 1;
             -- Mostrar información
             DBMS_OUTPUT.PUT_LINE( r_empleado.last_name || 
                 ' - Nuevo salario: $' || (r_empleado.salary + v_salario_minimo) ||
@@ -241,10 +241,10 @@ CREATE OR REPLACE PACKAGE BODY INCREMENTO_SALARIAL IS
         END LOOP;
         
         -- Resultado final
-        IF c_empleados%ROWCOUNT = 0 THEN
+        IF v_emp_beneficiados = 0 THEN
             DBMS_OUTPUT.PUT_LINE(' No hay empleados con salario < $1500 en este departamento');
         ELSE
-            DBMS_OUTPUT.PUT_LINE(' Total empleados beneficiados: ' || c_empleados%ROWCOUNT );
+            DBMS_OUTPUT.PUT_LINE(' Total empleados beneficiados: ' || v_emp_beneficiados );
         END IF;
         
         
@@ -328,8 +328,8 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('');
     
     -- Prueba 1: Localidad existente
-    DBMS_OUTPUT.PUT_LINE('Prueba 1: Localidad "NORTE"');
-    eliminar_departamentos_localidad('NORTE');
+    DBMS_OUTPUT.PUT_LINE('Prueba 1: Localidad "DALLAS"');
+    eliminar_departamentos_localidad('DALLAS');
     
     DBMS_OUTPUT.PUT_LINE('');
     
@@ -355,8 +355,8 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('');
     
     -- Prueba 2: Procedimiento con departamento específico
-    DBMS_OUTPUT.PUT_LINE('Prueba 2: EMPLE_BENEFICIADO con departamento 30');
-    INCREMENTO_SALARIAL.EMPLE_BENEFICIADO(30);
+    DBMS_OUTPUT.PUT_LINE('Prueba 2: EMPLE_BENEFICIADO con departamento 20');
+    INCREMENTO_SALARIAL.EMPLE_BENEFICIADO(20);
     
     DBMS_OUTPUT.PUT_LINE('');
     
